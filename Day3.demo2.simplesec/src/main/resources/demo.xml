@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+					https://www.springframework.org/schema/beans/spring-beans.xsd
+					http://www.springframework.org/schema/context
+					https://www.springframework.org/schema/context/spring-context.xsd
+					http://www.springframework.org/schema/security
+					http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+	<bean id="hw" class="demo.HelloWorld">
+		<security:intercept-methods>
+			<security:protect access="ROLE_admin"
+				method="method1" />
+			<security:protect access="ROLE_stduser"
+				method="method2" />
+		</security:intercept-methods>
+	</bean>
+
+
+	<security:authentication-manager>
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="user1" password="{noop}pass1"
+					authorities="ROLE_admin" />
+				<security:user name="user2" password="{noop}pass2"
+					authorities="ROLE_stduser" />
+				<security:user name="user3" password="{noop}pass3"
+					authorities="ROLE_stduser,ROLE_admin" />
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	<security:global-method-security
+		secured-annotations="enabled" />
+</beans>
